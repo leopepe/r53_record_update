@@ -1,6 +1,6 @@
 .PHONY: all
 
-PROJECT_NAME=$(shell dirname $PWD/.|rev|cut -d\/ -f 1|rev)
+PROJECT_NAME=$(shell dirname ${PWD}/.|rev|cut -d\/ -f 1|rev)
 DOCKER_HUB_ORG?=leopepe
 DOCKER_IMG_NAME?=${PROJECT_NAME}
 VERSION?=$(shell cat ${PROJECT_NAME}/__version__.py|cut -d\  -f3)
@@ -15,7 +15,7 @@ install:
 	./venv/bin/python setup.py install
 
 docker-build:
-	docker run --rm -v $(shell pwd):/worker -w /worker iron/python:3-dev pip install -t packages -r requirements
+	docker run --rm -v $(shell pwd):/worker -w /worker iron/python:3.5.1-dev pip install -t packages -r requirements
 	docker build -t ${PROJECT_NAME}:${VERSION} .
 	docker tag ${PROJECT_NAME}:$(shell cat ${PROJECT_NAME}/__version__.py | cut -d"=" -f2| sed 's/\"//g'|sed 's/\ //g') ${PROJECT_NAME}:${VERSION}
 
@@ -26,7 +26,7 @@ docker-push-hub:
 docker-push: docker-build docker-push-hub
 
 test:
-	docker run --rm -v $(shell pwd):/worker -e "PYTHONPATH=/worker/packages" -w /worker iron/python:3 python3 -m ${PROJECT_NAME}
+	docker run --rm -v $(shell pwd):/worker -e "PYTHONPATH=/worker/packages" -w /worker iron/python:3.5.1 python3 -m ${PROJECT_NAME}
 
 clean:
 	sudo rm -rf venv/*

@@ -41,7 +41,6 @@ class R53:
         response = None
         for zone in self.client.list_hosted_zones_by_name(DNSName=name)['HostedZones']:
             if zone['Name'] == name:
-                # response = zone['Id'].split('/')[2]
                 response = zone
         return response
 
@@ -71,7 +70,7 @@ class R53:
         return self.list_private_zones_by_name(name)['Id'].split('/')[2]
 
     def update_a_record(self, record_name: str, ip: str, zone_id: str=None, ttl=600,
-                        comment: str='Updated at: {}'.format(str(datetime.now().isoformat(timespec='minutes')))):
+                        comment: str='Updated by R53_RECORD_UPDATE'):
         """
         Modifies a given resource record set for
         HostedZoneId
@@ -82,7 +81,7 @@ class R53:
         response = self.client.change_resource_record_sets(
             HostedZoneId=zone_id,
             ChangeBatch={
-                'Comment': '{}'.format(comment),
+                'Comment': comment,
                 'Changes': [
                     {
                         'Action': 'UPSERT',

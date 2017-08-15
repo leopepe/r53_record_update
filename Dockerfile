@@ -1,4 +1,4 @@
-FROM iron/python:3
+FROM iron/python:3.5.1
 
 RUN mkdir /app
 COPY ./r53_record_update /app/r53_record_update
