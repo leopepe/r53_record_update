@@ -112,4 +112,5 @@ if __name__ == '__main__':
     record_name, ip = args[1], args[2]
 
     response = r53.update_a_record(record_name=record_name, ip=ip)
-    print(json.dumps(response, indent=4))
+    # print(json.dumps(response, indent=4, skipkeys=True))
+    print(response)

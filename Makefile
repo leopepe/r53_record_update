@@ -3,7 +3,7 @@
 PROJECT_NAME=$(shell dirname ${PWD}/.|rev|cut -d\/ -f 1|rev)
 DOCKER_HUB_ORG?=leopepe
 DOCKER_IMG_NAME?=${PROJECT_NAME}
-VERSION?=$(shell cat ${PROJECT_NAME}/__version__.py|cut -d\  -f3)
+VERSION?=$(shell cat ${PROJECT_NAME}/__version__.py|cut -d\  -f3|sed 's/"//g'|sed 's/\ //g')
 
 all: virtualenv install docker-push
 
@@ -17,7 +17,7 @@ install:
 docker-build:
 	docker run --rm -v $(shell pwd):/worker -w /worker iron/python:3.5.1-dev pip install -t packages -r requirements
 	docker build -t ${PROJECT_NAME}:${VERSION} .
-	docker tag ${PROJECT_NAME}:$(shell cat ${PROJECT_NAME}/__version__.py | cut -d"=" -f2| sed 's/\"//g'|sed 's/\ //g') ${PROJECT_NAME}:${VERSION}
+	docker tag ${DOCKER_IMG_NAME}:${VERSION} ${DOCKER_HUB_ORG}/${DOCKER_IMG_NAME}:${VERSION}
 
 docker-push-hub:
 	docker tag ${DOCKER_IMG_NAME}:${VERSION} ${DOCKER_HUB_ORG}/${DOCKER_IMG_NAME}:${VERSION}
