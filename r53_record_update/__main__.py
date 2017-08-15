@@ -71,7 +71,7 @@ class R53:
         return self.list_private_zones_by_name(name)['Id'].split('/')[2]
 
     def update_a_record(self, record_name: str, ip: str, zone_id: str=None, ttl=600,
-                        comment: str='Updated at: {}'.format(datetime.now())):
+                        comment: str='Updated at: {}'.format(str(datetime.now()))):
         """
         Modifies a given resource record set for
         HostedZoneId
